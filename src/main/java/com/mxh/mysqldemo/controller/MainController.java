@@ -6,14 +6,17 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.annotation.Resource;
 import javax.sql.DataSource;
 import java.sql.*;
+import java.util.HashMap;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api")
 public class MainController {
 
-    @Autowired
+    @Resource(name = "routingDataSource")
     private DataSource dataSource;
 
     @GetMapping("insert")
@@ -62,22 +65,21 @@ public class MainController {
 
     @GetMapping("ss/select")
     public String ssSelect() throws SQLException {
-        Connection connection = dataSource.getConnection();
-        PreparedStatement preparedStatement = connection.prepareStatement("select * from stu limit 1");
-        ResultSet resultSet = preparedStatement.executeQuery();
-        resultSet.next();
-        return "" + resultSet.getInt(1);
+//        Connection connection = dataSource.getConnection();
+//        PreparedStatement preparedStatement = connection.prepareStatement("select * from stu limit 1");
+//        ResultSet resultSet = preparedStatement.executeQuery();
+//        resultSet.next();
+//        return "" + resultSet.getInt(1);
+        return "";
     }
 
 
     @GetMapping("dy/select")
     public String dySelect() throws SQLException {
-        AbstractRoutingDataSource abstractRoutingDataSource = new AbstractRoutingDataSource() {
-            @Override
-            protected Object determineCurrentLookupKey() {
-                return null;
-            }
-        };
-        return "";
+        Connection connection = dataSource.getConnection();
+        PreparedStatement preparedStatement = connection.prepareStatement("select * from stu limit 1");
+        ResultSet resultSet = preparedStatement.executeQuery();
+        resultSet.next();
+        return "" + resultSet.getInt(1);
     }
 }
